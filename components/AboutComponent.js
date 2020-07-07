@@ -56,12 +56,12 @@ class About extends Component {
             data={this.state.partners}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderPartner}
-
           />
         </Card>
       </ScrollView>
     );
   }
 }
+
 
 export default About;
