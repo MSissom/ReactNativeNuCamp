@@ -3,20 +3,19 @@ import { View, Text, ScrollView } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import { Card, ListItem } from "react-native-elements";
 import { FlatList } from "react-native";
-import { connect } from 'react-redux';
-import { baseUrl } from '../shared/baseUrl';
+import { connect } from "react-redux";
+import { baseUrl } from "../shared/baseUrl";
+import Loading from "./LoadingComponent";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    partners: state.partners
+    partners: state.partners,
   };
 };
 
 function Mission() {
   return (
-    <Card
-    title="Our Mission"
-    wrapperStyle={{margin: 20}}>
+    <Card title="Our Mission" wrapperStyle={{ margin: 20 }}>
       <Text>
         We present a curated database of the best campsites in the vast woods
         and backcountry of the World Wide Web Wilderness. We increase access to
@@ -31,7 +30,6 @@ function Mission() {
 }
 
 class About extends Component {
-
   static navigationOptions = {
     title: "About Us",
   };
@@ -42,20 +40,38 @@ class About extends Component {
         <ListItem
           title={item.name}
           subtitle={item.description}
-          leftAvatar={{ source: {uri: baseUrl + item.image}}}
+          leftAvatar={{ source: { uri: baseUrl + item.image } }}
         />
       );
     };
 
+    if (this.props.partners.isLoading) {
+      return (
+        <ScrollView>
+          <Mission />
+          <Card title="Community Partners" wrapperStyle={{ margin: 20 }}>
+            <Loading />
+          </Card>
+        </ScrollView>
+      );
+    }
+    if (this.props.partners.errMess) {
+      return (
+        <ScrollView>
+          <Mission />
+          <Card title="Community Partners" wrapperStyle={{ margin: 20 }}>
+            <Text>{this.props.partners.errMess}</Text>
+          </Card>
+        </ScrollView>
+      );
+    }
     return (
       <ScrollView>
         <Mission />
-        <Card
-        title="Community Partners"
-        wrapperStyle={{margin: 20}}>
+        <Card title="Community Partners" wrapperStyle={{ margin: 20 }}>
           <FlatList
             data={this.props.partners.partners}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={renderPartner}
           />
         </Card>
@@ -63,6 +79,5 @@ class About extends Component {
     );
   }
 }
-
 
 export default connect(mapStateToProps)(About);
