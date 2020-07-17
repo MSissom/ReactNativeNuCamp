@@ -3,7 +3,6 @@ import {
   Text,
   View,
   ScrollView,
-  Flatlist,
   FlatList,
   Modal,
   Button,
